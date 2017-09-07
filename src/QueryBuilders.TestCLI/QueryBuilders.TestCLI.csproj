@@ -49,7 +49,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\QueryBuilders\QueryBuilders.csproj">
+    <ProjectReference Include="..\QueryBuilders\QueryBuilders.csproj">
       <Project>{3a2bb353-4fe7-40c3-9dd6-619d4bafaf8b}</Project>
       <Name>QueryBuilders</Name>
     </ProjectReference>
