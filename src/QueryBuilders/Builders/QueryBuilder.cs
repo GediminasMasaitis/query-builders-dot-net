@@ -35,6 +35,14 @@ namespace QueryBuilders.Builders
             }
         }
 
+        public string Build()
+        {
+            var sb = new StringBuilder();
+            BuildInto(sb);
+            var str = sb.ToString();
+            return str;
+        }
+
         public void BuildInto(StringBuilder builder)
         {
             var initialLength = builder.Length;
@@ -47,5 +55,10 @@ namespace QueryBuilders.Builders
         }
 
         public abstract void BuildBodyInto(StringBuilder builder);
+
+        public override string ToString()
+        {
+            return Build();
+        }
     }
 }
