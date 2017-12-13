@@ -14,19 +14,23 @@ namespace QueryBuilders.Services
             ReverseLookupTable = new Dictionary<object, string>();
         }
 
-        public QueryParameter AddParameter(object value, bool useExisting = true)
+        public QueryParameter AddParameter(object value, bool useExisting = false)
         {
             if (value == null)
             {
                 value = DBNull.Value;
             }
-            if (useExisting && ReverseLookupTable.TryGetValue(value, out var paramName))
+            var exists = ReverseLookupTable.TryGetValue(value, out var paramName);
+            if (exists && useExisting)
             {
                 return this[paramName];
             }
             paramName = "@p_" + Count;
             var parameter = new QueryParameter(paramName, value);
-            ReverseLookupTable.Add(value, paramName);
+            if (!exists)
+            {
+                ReverseLookupTable.Add(value, paramName);
+            }
             Add(paramName, parameter);
             return parameter;
         }

@@ -50,7 +50,7 @@ namespace QueryBuilders.Builders
         {
             if (string.IsNullOrEmpty(Table))
             {
-                throw new QueryBuildException($"Must assign a table to insert into. Use the {nameof(Table)} property.");
+                throw new QueryBuildException($"Must assign a table to update. Use the {nameof(Table)} property.");
             }
             if (Entries.Count == 0)
             {
@@ -66,8 +66,6 @@ namespace QueryBuilders.Builders
             for (var i = 0; i < FieldNames.Count; i++)
             {
                 var fieldName = FieldNames[i];
-                builder.Append(fieldName);
-                builder.Append(" = ");
                 var entry = Entries[fieldName];
                 if (entry.AddParentheses)
                 {
