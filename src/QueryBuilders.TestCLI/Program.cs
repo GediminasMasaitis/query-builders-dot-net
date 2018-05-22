@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Text;
 using QueryBuilders.Builders;
 using QueryBuilders.Models;
@@ -53,7 +52,7 @@ namespace QueryBuilders.TestCLI
             {
                 // Sets the CommandText property, as well as values for p_0 and p_1 parameters
                 builder.PrepareDbCommand(command);
-                
+
             }
         }
     }

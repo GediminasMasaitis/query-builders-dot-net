@@ -1,96 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3A2BB353-4FE7-40C3-9DD6-619D4BAFAF8B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QueryBuilders</RootNamespace>
-    <AssemblyName>QueryBuilders</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Fody|AnyCPU'">
-    <OutputPath>bin\Fody\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Can Analyzer\CanDatabase\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Buildables\CompositeEntry.cs" />
-    <Compile Include="Buildables\CompositeExpression.cs" />
-    <Compile Include="Interfaces\IDeleteQueryBuilder.cs" />
-    <Compile Include="Interfaces\IHasOnlyBuilder.cs" />
-    <Compile Include="Interfaces\IHasSelectQueryBuilder.cs" />
-    <Compile Include="Interfaces\IHasUsingsBuilder.cs" />
-    <Compile Include="Interfaces\IInsertQueryBuilder.cs" />
-    <Compile Include="Interfaces\IHasExplainBuilder.cs" />
-    <Compile Include="Interfaces\IHasTableBuilder.cs" />
-    <Compile Include="Services\DbDataParameterFactory.cs" />
-    <Compile Include="Builders\DeleteQueryBuilder.cs" />
-    <Compile Include="Models\ExplainFormat.cs" />
-    <Compile Include="Buildables\ExplainStatement.cs" />
-    <Compile Include="Buildables\IBuildable.cs" />
-    <Compile Include="Buildables\ICompositeEntry.cs" />
-    <Compile Include="Services\IDbDataParameterFactory.cs" />
-    <Compile Include="Interfaces\IHasFromsBuilder.cs" />
-    <Compile Include="Interfaces\IHasReturningBuilder.cs" />
-    <Compile Include="Interfaces\IHasValuesBuilder.cs" />
-    <Compile Include="Interfaces\IHasWhereBuilder.cs" />
-    <Compile Include="Builders\InsertQueryBuilder.cs" />
-    <Compile Include="Services\IParameterList.cs" />
-    <Compile Include="Interfaces\IQueryBuilder.cs" />
-    <Compile Include="Interfaces\IUpdateQueryBuilder.cs" />
-    <Compile Include="Buildables\OrderByExpression.cs" />
-    <Compile Include="Services\ParameterList.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Builders\QueryBuilder.cs" />
-    <Compile Include="Exceptions\QueryBuildException.cs" />
-    <Compile Include="Models\QueryLogicOperator.cs" />
-    <Compile Include="Buildables\QueryJoin.cs" />
-    <Compile Include="Models\QueryJoinType.cs" />
-    <Compile Include="Models\QueryParameter.cs" />
-    <Compile Include="Builders\SelectQueryBuilder.cs" />
-    <Compile Include="Buildables\StringExpression.cs" />
-    <Compile Include="Builders\UpdateQueryBuilder.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
