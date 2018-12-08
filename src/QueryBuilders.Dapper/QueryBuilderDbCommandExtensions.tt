@@ -1,0 +1,333 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="EnvDTE" #>
+<#@ assembly name="VSLangProj" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Data" #>
+<#@ output extension=".cs" #>
+<# Run(); #>
+<#+
+    private readonly IDictionary<Type, string> _aliases = new Dictionary<Type, string>()
+    {
+        { typeof(byte), "byte" },
+        { typeof(sbyte), "sbyte" },
+        { typeof(short), "short" },
+        { typeof(ushort), "ushort" },
+        { typeof(int), "int" },
+        { typeof(uint), "uint" },
+        { typeof(long), "long" },
+        { typeof(ulong), "ulong" },
+        { typeof(float), "float" },
+        { typeof(double), "double" },
+        { typeof(decimal), "decimal" },
+        { typeof(object), "object" },
+        { typeof(bool), "bool" },
+        { typeof(char), "char" },
+        { typeof(string), "string" },
+        { typeof(void), "void" }
+    };
+
+    private const string DapperProjectName = "Dapper";
+    private const string DapperSqlMapperName = "Dapper.SqlMapper";
+
+    private const string ExecuteMethods = "Execute";
+    private const string QueryMethods = "Query";
+
+    private const string QueryBuilderParameterName = "qb";
+    private const string ConnectionParameterName = "cnn";
+    private const string SqlParameterName = "sql";
+    private const string ParametersParameterName = "param";
+
+    private void Run()
+    {
+        WriteLine("// WARNING");
+        WriteLine("// This file is auto generated.");
+        WriteLine("// Please edit the code generator (.tt) file instead.");
+        WriteLine();
+
+        WriteLine("using System;");
+        WriteLine("using System.Collections.Generic;");
+        WriteLine("using System.Data;");
+        WriteLine("using System.Threading.Tasks;");
+        WriteLine("using Dapper;");
+        WriteLine("using QueryBuilders.Interfaces;");
+        WriteLine();
+        WriteLine("using static Dapper.SqlMapper;");
+        WriteLine();
+        WriteLine("namespace QueryBuilders.Dapper");
+        WriteLine("{");
+        PushIndent();
+
+        WriteLine("public static class QueryBuilderDbCommandExtensions");
+        WriteLine("{");
+        PushIndent();
+
+        RunInner();
+
+        PopIndent();
+        WriteLine("}");
+
+        PopIndent();
+        WriteLine("}");
+    }
+
+    private void RunInner()
+    {
+        var project = GetProject();
+        var dapperAssembly = LoadAssemblyFromProject(project, DapperProjectName, false);
+        var sqlMapperType = GetDapperSqlMapperType(dapperAssembly);
+        var methods = GetTargetMethods(sqlMapperType).OrderBy(m => m.Name);
+        WriteMethods(methods);
+    }
+
+    private VSLangProj.VSProject GetProject()
+    {
+        var serviceProvider = (IServiceProvider)Host;
+        var dteType = typeof(EnvDTE.DTE);
+        var dte = (EnvDTE.DTE)serviceProvider.GetService(dteType);
+        var templateItem = dte.Solution.FindProjectItem(Host.TemplateFile);
+        var project = (VSLangProj.VSProject)templateItem.ContainingProject.Object;
+        return project;
+    }
+
+    private Assembly LoadAssemblyFromProject(VSLangProj.VSProject project, string name, bool reflectionOnly)
+    {
+        var references = project.References.Cast<VSLangProj.Reference>().ToList();
+        var reference = references.Single(ass => ass.Name == name);
+        var path = reference.Path;
+        var assembly = reflectionOnly ? Assembly.ReflectionOnlyLoadFrom(path) : Assembly.LoadFrom(path);
+        return assembly;
+    }
+
+    private Type GetDapperSqlMapperType(Assembly dapperAssembly)
+    {
+        var type = dapperAssembly.GetType(DapperSqlMapperName, true);
+        return type;
+    }
+
+    private IEnumerable<MethodInfo> GetTargetMethods(Type type)
+    {
+        foreach (var method in type.GetMethods().OrderBy(m => m.Name))
+        {
+            if (!method.Name.StartsWith(QueryMethods) && !method.Name.StartsWith(ExecuteMethods))
+            {
+                continue;
+            }
+            if (method.GetParameters().First().ParameterType != typeof(IDbConnection))
+            {
+                continue;
+            }
+            if (!HasSpecialParameters(method))
+            {
+                continue;
+            }
+            yield return method;
+        }
+    }
+
+    private void WriteMethods(IEnumerable<MethodInfo> methods)
+    {
+        foreach (var method in methods)
+        {
+            WriteMethodDeclaration(method);
+            WriteLine();
+            WriteMethodBody(method);
+            WriteLine();
+        }
+    }
+	
+    private void WriteMethodDeclaration(MethodInfo method)
+    {
+        Write("public static ");
+
+        WriteTypeDeclaration(method.ReturnType);
+        Write(" ");
+        WriteMethodName(method);
+        WriteLine("(");
+        PushIndent();
+        WriteLine($"this {nameof(IDbConnection)} cnn,");
+        Write($"IQueryBuilder {QueryBuilderParameterName}");
+        var parameters = method.GetParameters();
+        for (var i = 1; i < parameters.Length; i++)
+        {
+            var parameter = parameters[i];
+            if (IsSpecialParameter(parameter))
+            {
+                continue;
+            }
+
+            WriteLine(", ");
+            WriteParameterDeclaration(parameter);
+        }
+        WriteLine();
+        PopIndent();
+        Write(")");
+    }
+
+    private void WriteTypeDeclaration(Type type)
+    {
+        var name = type.Name;
+        if (_aliases.TryGetValue(type, out var alias))
+        {
+            name = alias;
+        }
+        if (!type.IsGenericType)
+        {
+            Write(name);
+            return;
+        }
+
+        if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
+        {
+            WriteTypeDeclaration(type.GetGenericArguments()[0]);
+            Write("?");
+            return;
+        }
+        var backtick = name.IndexOf('`');
+        if (backtick > 0)
+        {
+            name = name.Remove(backtick);
+        }
+        Write(name);
+        Write("<");
+        var typeParameters = type.GetGenericArguments();
+        for (var i = 0; i < typeParameters.Length; ++i)
+        {
+            if (i != 0)
+            {
+                Write(", ");
+            }
+            WriteTypeDeclaration(typeParameters[i]);
+        }
+        Write(">");
+    }
+
+    private void WriteMethodName(MethodInfo method)
+    {
+        if (!method.ContainsGenericParameters)
+        {
+            Write(method.Name);
+            return;
+        }
+        Write(method.Name);
+        Write("<");
+        var genericArguments = method.GetGenericArguments();
+        for (var i = 0; i < genericArguments.Length; i++)
+        {
+            var genericArgument = genericArguments[i];
+            if (i != 0)
+            {
+                Write(", ");
+            }
+            Write(genericArgument.Name);
+        }
+        Write(">");
+    }
+
+    private bool IsCommandText(ParameterInfo parameter)
+    {
+        return parameter.ParameterType == typeof(string) && parameter.Name == SqlParameterName;
+    }
+
+    private bool IsParameters(ParameterInfo parameter)
+    {
+        return parameter.ParameterType == typeof(object) && parameter.Name == ParametersParameterName;
+    }
+
+    private bool IsSpecialParameter(ParameterInfo parameterInfo)
+    {
+        return IsCommandText(parameterInfo) || IsParameters(parameterInfo);
+    }
+
+    private bool HasSpecialParameters(MethodInfo methodInfo)
+    {
+        return methodInfo.GetParameters().Any(IsSpecialParameter);
+    }
+
+    private void WriteParameterDeclaration(ParameterInfo parameter)
+    {
+        WriteTypeDeclaration(parameter.ParameterType);
+        Write(" ");
+        Write(parameter.Name);
+        if (!parameter.HasDefaultValue)
+        {
+            return;
+        }
+        Write(" = ");
+        if (parameter.DefaultValue is bool boolValue)
+        {
+            Write(boolValue.ToString().ToLower());
+            return;
+        }
+
+        if (parameter.DefaultValue is string stringValue)
+        {
+            Write($"\"{stringValue}\"");
+            return;
+        }
+
+        if (parameter.ParameterType.IsEnum)
+        {
+            Write(parameter.ParameterType.Name);
+            Write(".");
+        }
+        Write(parameter.DefaultValue?.ToString() ?? "null");
+    }
+
+    private void WriteMethodBody(MethodInfo method)
+    {
+        WriteLine("{");
+        PushIndent();
+
+        var parameters = method.GetParameters();
+        if (parameters.Any(IsCommandText))
+        {
+			WriteLine($"var {SqlParameterName} = qb.BuildQuery();");
+        }
+        if (parameters.Any(IsParameters))
+        {
+            WriteLine($"var {ParametersParameterName} = qb.GetParameterDictionary();");
+        }
+		Write($"return {ConnectionParameterName}.");
+        WriteMethodCall(method);
+
+        PopIndent();
+        WriteLine("}");
+    }
+
+    private void WriteMethodCall(MethodInfo method)
+    {
+		WriteMethodName(method);
+        WriteLine("(");
+		PushIndent();
+        var parameters = method.GetParameters();
+        for (var i = 1; i < parameters.Length; i++)
+        {
+            var parameter = parameters[i];
+            if (i > 1)
+            {
+				WriteLine(", ");
+            }
+            Write(parameter.Name);
+            Write(": ");
+            Write(parameter.Name);
+        }
+		WriteLine();
+        PopIndent();
+        WriteLine(");");
+    }
+
+    private void PushIndent()
+    {
+        PushIndent("    ");
+    }
+
+    private void WriteLine()
+    {
+        WriteLine(string.Empty);
+    }
+
+#>

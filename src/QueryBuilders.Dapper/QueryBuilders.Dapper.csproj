@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net451</TargetFrameworks>
+    <PackageId>QueryBuildersDotNet.Dapper</PackageId>
+    <Version>1.0.3</Version>
+    <Authors>Gediminas Masaitis</Authors>
+    <Product>QueryBuilders.NET Dapper integration</Product>
+    <Description>Provides multiple methods to integrate QueryBuilders.NET with Dapper micro-orm</Description>
+    <PackageProjectUrl>https://github.com/GediminasMasaitis/query-builders-dot-net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GediminasMasaitis/query-builders-dot-net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>sql query builder dapper</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/GediminasMasaitis/query-builders-dot-net/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QueryBuilders\QueryBuilders.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="QueryBuilderDbCommandExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>QueryBuilderDbCommandExtensions.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="QueryBuilderDbCommandExtensions.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QueryBuilderDbCommandExtensions.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>
