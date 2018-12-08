@@ -1,13 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using QueryBuilders.Buildables;
 using QueryBuilders.Exceptions;
+using QueryBuilders.Interfaces;
 using QueryBuilders.Models;
 
 namespace QueryBuilders.Builders
 {
-    public class SelectQueryBuilder : QueryBuilder
+    public class SelectQueryBuilder : QueryBuilder, ISelectQueryBuilder
     {
         public IList<IBuildable> SelectExpressions { get; }
         public IList<string> Froms { get; }
@@ -32,6 +32,12 @@ namespace QueryBuilders.Builders
             Offset = null;
         }
 
+        public void AddField(string field, params object[] parameters)
+        {
+            var expr = new StringExpression(ParameterList, field, parameters);
+            SelectExpressions.Add(expr);
+        }
+
         public void AddFrom(string table)
         {
             Froms.Add(table);
@@ -42,12 +48,6 @@ namespace QueryBuilders.Builders
             var join = new QueryJoin(ParameterList, table, joinType, QueryLogicOperator.And);
             Joins.Add(join);
             return join;
-        }
-
-        public void AddField(string field)
-        {
-            var expr = new StringExpression(ParameterList, field);
-            SelectExpressions.Add(expr);
         }
 
         public void AddOrderBy(string statement, bool ascending)

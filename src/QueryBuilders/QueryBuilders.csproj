@@ -2,6 +2,21 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net40</TargetFrameworks>
+    <PackageId>QueryBuildersDotNET</PackageId>
+    <Authors>Gediminas Masaitis</Authors>
+    <Company />
+    <Product>QueryBuilders.NET</Product>
+    <Description>SQL query builders for the .NET framework</Description>
+    <Copyright />
+    <PackageLicenseUrl>https://raw.githubusercontent.com/GediminasMasaitis/query-builders-dot-net/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/GediminasMasaitis/query-builders-dot-net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GediminasMasaitis/query-builders-dot-net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>sql query builder</PackageTags>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
+    <Version>1.0.3</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

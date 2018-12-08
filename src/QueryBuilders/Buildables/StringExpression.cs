@@ -1,6 +1,5 @@
 using System.Text;
 using JetBrains.Annotations;
-using QueryBuilders.Models;
 using QueryBuilders.Services;
 
 namespace QueryBuilders.Buildables
