@@ -18,10 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\QueryBuilders\QueryBuilders.csproj" />
+    <PackageReference Include="QueryBuildersDotNET" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>

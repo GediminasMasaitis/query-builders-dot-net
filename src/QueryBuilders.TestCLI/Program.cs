@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Text;
+using Dapper;
 using QueryBuilders.Builders;
+using QueryBuilders.Dapper;
 using QueryBuilders.Models;
 
 namespace QueryBuilders.TestCLI
@@ -52,8 +54,17 @@ namespace QueryBuilders.TestCLI
             {
                 // Sets the CommandText property, as well as values for p_0 and p_1 parameters
                 builder.PrepareDbCommand(command);
-
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Read rows...
+                    }
+                }
             }
+
+            // Also integrates with Dapper using the QueryBuildersDotNet.Dapper package
+            var results = connection.Query(builder);
         }
     }
 }

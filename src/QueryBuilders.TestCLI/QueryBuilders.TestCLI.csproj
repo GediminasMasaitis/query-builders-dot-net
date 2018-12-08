@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QueryBuilders.Dapper\QueryBuilders.Dapper.csproj" />
     <ProjectReference Include="..\QueryBuilders\QueryBuilders.csproj" />
   </ItemGroup>
 
