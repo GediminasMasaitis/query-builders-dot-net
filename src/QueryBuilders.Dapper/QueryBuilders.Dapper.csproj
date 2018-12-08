@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net451</TargetFrameworks>
-    <PackageId>QueryBuildersDotNet.Dapper</PackageId>
+    <PackageId>QueryBuildersDotNET.Dapper</PackageId>
     <Version>1.0.3</Version>
     <Authors>Gediminas Masaitis</Authors>
     <Product>QueryBuilders.NET Dapper integration</Product>
-    <Description>Provides multiple methods to integrate QueryBuilders.NET with Dapper micro-orm</Description>
+    <Description>Provides multiple methods to integrate QueryBuilders.NET with the Dapper micro-orm</Description>
     <PackageProjectUrl>https://github.com/GediminasMasaitis/query-builders-dot-net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GediminasMasaitis/query-builders-dot-net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
