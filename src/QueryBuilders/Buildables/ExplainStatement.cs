@@ -7,6 +7,8 @@ namespace QueryBuilders.Buildables
 {
     public class ExplainStatement : IBuildable
     {
+        public bool IsEmpty => false;
+
         public bool Explain { get; set; }
         public bool? Analyze { get; set; }
         public bool? Verbose { get; set; }

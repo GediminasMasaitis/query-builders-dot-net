@@ -8,6 +8,8 @@ namespace QueryBuilders.Builders
 {
     public abstract class QueryBuilder : IQueryBuilder
     {
+        public bool IsEmpty => false;
+
         public ExplainStatement Explain { get; }
         public IParameterList ParameterList { get; set; }
         public IDbDataParameterFactory DbDataParameterFactory { get; set; }

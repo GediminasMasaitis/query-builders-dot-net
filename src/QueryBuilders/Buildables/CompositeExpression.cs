@@ -12,6 +12,8 @@ namespace QueryBuilders.Buildables
 
     public class CompositeExpression : IBuildable
     {
+        public bool IsEmpty => Entries.All(e => e.Buildable.IsEmpty);
+
         private IParameterList ParameterList { get; }
         public QueryLogicOperator DefaultChildrenOperator { get; }
         public IList<ICompositeEntry<IBuildable>> Entries { get; }
@@ -138,9 +140,10 @@ namespace QueryBuilders.Buildables
         public virtual void BuildInto(StringBuilder builder)
         {
             var defaultOperatorStr = QueryLogicOperatorToString(DefaultChildrenOperator);
-            for (var i = 0; i < Entries.Count; i++)
+            var nonEmptyEntries = Entries.Where(e => !e.Buildable.IsEmpty).ToList();
+            for (var i = 0; i < nonEmptyEntries.Count; i++)
             {
-                var entry = Entries[i];
+                var entry = nonEmptyEntries[i];
                 if (i != 0)
                 {
                     var forcedOperatorStr = entry.ForcedOperator.HasValue ? QueryLogicOperatorToString(entry.ForcedOperator.Value) : null;
@@ -157,7 +160,7 @@ namespace QueryBuilders.Buildables
                 {
                     builder.Append(')');
                 }
-                if (i < Entries.Count - 1)
+                if (i < nonEmptyEntries.Count - 1)
                 {
                     builder.Append(' ');
                 }

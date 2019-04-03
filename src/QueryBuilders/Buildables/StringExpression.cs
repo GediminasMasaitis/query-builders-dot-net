@@ -6,6 +6,8 @@ namespace QueryBuilders.Buildables
 {
     public class StringExpression : IBuildable
     {
+        public bool IsEmpty => false;
+
         private IParameterList ParameterList { get; }
         public string Statement { get; }
 

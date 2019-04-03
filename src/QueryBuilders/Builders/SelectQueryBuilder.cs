@@ -100,7 +100,7 @@ namespace QueryBuilders.Builders
                 Joins[i].BuildInto(builder);
             }
             
-            if (Where.Entries.Count > 0)
+            if (!Where.IsEmpty)
             {
                 builder.Append(" WHERE ");
                 Where.BuildInto(builder);

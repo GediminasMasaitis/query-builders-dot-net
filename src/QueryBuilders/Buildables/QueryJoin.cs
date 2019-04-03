@@ -10,8 +10,9 @@ namespace QueryBuilders.Buildables
 {
     public class QueryJoin : IBuildable, IHasUsingsBuilder
     {
-        public IParameterList Parameters { get; }
+        public bool IsEmpty => false;
 
+        public IParameterList Parameters { get; }
         public string Table { get; }
         public bool Natural { get; }
         public QueryJoinType JoinType { get; }
