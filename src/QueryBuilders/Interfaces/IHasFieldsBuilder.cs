@@ -1,6 +1,6 @@
 ﻿namespace QueryBuilders.Interfaces
 {
-    interface IHasFieldsBuilder
+    public interface IHasFieldsBuilder
     {
         void AddField(string field, params object[] parameters);
     }

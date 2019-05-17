@@ -1,6 +1,6 @@
 ﻿namespace QueryBuilders.Interfaces
 {
-    interface IHasOffsetBuilder
+    public interface IHasOffsetBuilder
     {
         int? Offset { get; set; }
     }

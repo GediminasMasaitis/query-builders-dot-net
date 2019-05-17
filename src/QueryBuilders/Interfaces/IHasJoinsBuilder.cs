@@ -3,7 +3,7 @@ using QueryBuilders.Models;
 
 namespace QueryBuilders.Interfaces
 {
-    interface IHasJoinsBuilder
+    public interface IHasJoinsBuilder
     {
         QueryJoin AddJoin(string table, QueryJoinType joinType = QueryJoinType.Inner);
     }

@@ -1,6 +1,6 @@
 ﻿namespace QueryBuilders.Interfaces
 {
-    interface IHasGroupByBuilder
+    public interface IHasGroupByBuilder
     {
         void AddGroupBy(string statement);
     }

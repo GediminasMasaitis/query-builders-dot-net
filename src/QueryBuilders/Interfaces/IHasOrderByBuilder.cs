@@ -1,6 +1,6 @@
 ﻿namespace QueryBuilders.Interfaces
 {
-    interface IHasOrderByBuilder
+    public interface IHasOrderByBuilder
     {
         void AddOrderBy(string statement, bool ascending);
     }

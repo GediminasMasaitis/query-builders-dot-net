@@ -1,6 +1,6 @@
 ﻿namespace QueryBuilders.Interfaces
 {
-    interface IHasLimitBuilder
+    public interface IHasLimitBuilder
     {
         int? Limit { get; set; }
     }
